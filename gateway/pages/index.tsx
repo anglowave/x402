@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import VaultBalance from '../components/VaultBalance';
+import { DottedSurface } from '@/components/dotted-surface';
 
 export default function Home() {
   const [jsonInput, setJsonInput] = useState('');
@@ -61,6 +62,7 @@ export default function Home() {
         <meta name="description" content="Pay for your AI agent x402 requests with our shared vault" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+
 
       <div className={styles.container}>
         <header className={styles.header}>

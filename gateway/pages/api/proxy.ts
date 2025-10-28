@@ -107,7 +107,6 @@ export default async function handler(
       });
     }
 
-    // No payment required - return response directly
     return res.status(200).json({
       success: true,
       data: response.data,
