@@ -1,38 +1,62 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to bottom, #1f2937, #000000);
   padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15), transparent 50%);
+  pointer-events: none;
 }
 
 .header {
-  background: white;
+  background: rgba(31, 41, 55, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(107, 114, 128, 0.3);
   border-radius: 20px;
-  padding: 40px;
-  margin-bottom: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 60px 40px;
+  margin-bottom: 40px;
   text-align: center;
+  position: relative;
+  z-index: 10;
 }
 
 .header h1 {
-  color: #333;
+  color: #ffffff;
   font-size: 3em;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
-  color: #666;
-  font-size: 1.2em;
-  margin-bottom: 15px;
+  color: #9ca3af;
+  font-size: 1.3em;
+  margin-bottom: 20px;
+  font-family: 'Courier New', monospace;
 }
 
 .badge {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px solid #3b82f6;
+  color: #60a5fa;
   padding: 8px 20px;
   border-radius: 20px;
   font-size: 0.9em;
   font-weight: 600;
+  font-family: 'Courier New', monospace;
 }
 
 .mainContent {
@@ -46,16 +70,20 @@
 }
 
 .card {
-  background: white;
-  border-radius: 15px;
+  background: rgba(31, 41, 55, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10;
 }
 
 .card h2 {
-  color: #333;
+  color: #ffffff;
   margin-bottom: 25px;
   font-size: 1.8em;
+  font-weight: 700;
 }
 
 .formGroup {
@@ -64,26 +92,30 @@
 
 .formGroup label {
   display: block;
-  color: #555;
+  color: #d1d5db;
   font-weight: 600;
   margin-bottom: 8px;
+  font-size: 0.95em;
 }
 
 .formGroup input,
 .formGroup textarea {
   width: 100%;
   padding: 12px;
-  border: 2px solid #e0e0e0;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(107, 114, 128, 0.3);
   border-radius: 8px;
   font-size: 1em;
   font-family: 'Courier New', monospace;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
+  color: #ffffff;
 }
 
 .formGroup input:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #6366f1;
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .formGroup textarea {
@@ -110,27 +142,29 @@
 }
 
 .btnPrimary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   color: white;
 }
 
 .btnPrimary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
 }
 
 .btnPrimary:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .btnSecondary {
-  background: #f0f0f0;
-  color: #333;
+  background: rgba(31, 41, 55, 0.5);
+  border: 2px solid rgba(107, 114, 128, 0.5);
+  color: #d1d5db;
 }
 
 .btnSecondary:hover {
-  background: #e0e0e0;
+  background: rgba(31, 41, 55, 0.8);
+  border-color: #6366f1;
 }
 
 .loading {
@@ -154,11 +188,11 @@
 }
 
 .error {
-  background: #f8d7da;
-  color: #721c24;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
   padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid #dc3545;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .success {
@@ -181,21 +215,75 @@
 }
 
 .paymentInfo {
-  background: #e3f2fd;
+  background: rgba(96, 165, 250, 0.1);
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 20px;
-  border-left: 4px solid #2196f3;
+  border: 1px solid rgba(96, 165, 250, 0.3);
 }
 
 .paymentInfo h3 {
-  color: #1565c0;
+  color: #60a5fa;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .paymentInfo p {
-  color: #1976d2;
+  color: #d1d5db;
   margin: 5px 0;
+}
+
+.paymentRequired {
+  background: rgba(251, 191, 36, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.paymentRequired h3 {
+  color: #fbbf24;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.paymentRequired p {
+  color: #d1d5db;
+  margin: 10px 0;
+}
+
+.copyInput {
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin: 10px 0;
+  color: #fbbf24;
+}
+
+.copyInput:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: #fbbf24;
+}
+
+.paymentOptions {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(251, 191, 36, 0.3);
+}
+
+.paymentOptions button {
+  margin-bottom: 10px;
+}
+
+.paymentOptions p {
+  color: #9ca3af;
+  font-size: 0.9em;
+  margin-top: 15px;
 }
 
 .responseData {
@@ -203,23 +291,25 @@
 }
 
 .responseData h3 {
-  color: #333;
+  color: #ffffff;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .responseData pre {
-  background: #2d2d2d;
+  background: rgba(0, 0, 0, 0.5);
   color: #f8f8f2;
   padding: 20px;
   border-radius: 8px;
   overflow-x: auto;
   font-size: 0.9em;
+  border: 1px solid rgba(107, 114, 128, 0.3);
 }
 
 .placeholder {
   text-align: center;
   padding: 60px 20px;
-  color: #999;
+  color: #6b7280;
 }
 
 .placeholder p {
@@ -228,8 +318,9 @@
 }
 
 .hint {
-  color: #667eea !important;
+  color: #818cf8 !important;
   font-weight: 600;
+  font-family: 'Courier New', monospace;
 }
 
 .infoSection {
@@ -241,21 +332,25 @@
 }
 
 .infoCard {
-  background: white;
-  border-radius: 15px;
+  background: rgba(31, 41, 55, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10;
 }
 
 .infoCard h3 {
-  color: #333;
+  color: #c084fc;
   margin-bottom: 20px;
   font-size: 1.5em;
+  font-weight: 700;
 }
 
 .infoCard ol,
 .infoCard ul {
-  color: #555;
+  color: #d1d5db;
   line-height: 2;
   padding-left: 20px;
 }

@@ -78,7 +78,7 @@ export default async function handler(
 
     // Check if 402 Payment Required
     if (response.status === 402) {
-      console.log('402 Payment Required - processing payment from vault');
+      console.log('402 Payment Required - returning payment details to user');
       
       const paymentChallenge = response.headers['x-payment-challenge'];
       if (!paymentChallenge) {
@@ -90,56 +90,21 @@ export default async function handler(
       const challenge = JSON.parse(paymentChallenge);
       console.log('Payment challenge:', challenge);
 
-      // Get vault keypair
-      const vaultKeypair = getVaultKeypair();
-      if (!vaultKeypair) {
-        return res.status(500).json({ error: 'Vault not configured' });
-      }
-
-      // Create payment (simplified - you'll need to implement actual x402 payment)
-      const payment = {
-        amount: challenge.amount,
-        recipient: challenge.recipient,
-        resource: challenge.resource,
-        nonce: challenge.nonce,
-        timestamp: challenge.timestamp,
-        token: challenge.token || 'SOL',
-      };
-
-      // Sign payment request
-      const paymentData = JSON.stringify(payment);
-      // Note: In production, properly implement x402 payment signing
-
-      // Retry request with payment
-      const retryResponse = await axios({
-        method: agentRequest.method || 'GET',
-        url: endpoint,
-        data: agentRequest.body,
-        headers: {
-          ...agentRequest.headers,
-          'X-Payment-Request': paymentData,
+      // Return payment details to user so they can pay manually
+      return res.status(200).json({
+        success: false,
+        paymentRequired: true,
+        challenge: {
+          amount: challenge.amount,
+          recipient: challenge.recipient,
+          resource: challenge.resource,
+          nonce: challenge.nonce,
+          timestamp: challenge.timestamp,
+          token: challenge.token || 'SOL',
         },
-        validateStatus: () => true,
+        data: response.data,
+        message: 'Payment required. Copy the recipient address and pay manually, or configure vault for automatic payments.',
       });
-
-      if (retryResponse.status === 200) {
-        return res.status(200).json({
-          success: true,
-          data: retryResponse.data,
-          payment: {
-            amount: payment.amount,
-            token: payment.token,
-            signature: 'vault-paid-transaction',
-            paidBy: 'vault',
-          },
-        });
-      } else {
-        return res.status(retryResponse.status).json({
-          success: false,
-          error: 'Payment processed but request still failed',
-          data: retryResponse.data,
-        });
-      }
     }
 
     // No payment required - return response directly
@@ -150,10 +115,18 @@ export default async function handler(
     });
 
   } catch (error: any) {
-    console.error('Proxy error:', error.message);
+    console.error('Proxy error:', error);
+    
+    let errorMessage = 'Internal server error';
+    if (error.code === 'ECONNREFUSED') {
+      errorMessage = `Cannot connect to ${endpoint}. Make sure the server is running.`;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
     return res.status(500).json({
       success: false,
-      error: error.message || 'Internal server error',
+      error: errorMessage,
     });
   }
 }
