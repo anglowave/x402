@@ -24,6 +24,14 @@ x402 is an **HTTP-native payment protocol** that enables micropayments for web r
 
 A full-featured Python implementation with support for Flask, FastAPI, and other web frameworks.
 
+### x402 Gateway
+
+**Status**: Beta
+
+A web application that allows users to make x402 payment requests without needing their own wallet. The gateway uses a shared Solana vault to handle all payments. Perfect for testing and demos.
+
+Location: `/gateway`
+
 ```bash
 cd python
 pip install -r requirements.txt
