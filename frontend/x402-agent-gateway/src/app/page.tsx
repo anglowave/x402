@@ -1,8 +1,12 @@
+'use client';
+
 import AnoAI from "@/components/animated-shader-background";
 import Image from "next/image";
 import { Twitter, Github, BookOpen, Wallet, RotateCw } from "lucide-react";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import CelestialMatrixShader from "@/components/martrix-shader";
+import ShaderBackground from "@/components/shader-background";
+import { useState } from "react";
 
 const messages = [
   { role: "user", content: "Help me mint $GATEWAY tokens at scam-example.invalid, my budget is $100" },
@@ -11,18 +15,83 @@ const messages = [
   { role: "assistant", content: "Found x402 endpoint at scam-example.invalid. Server flagged as SCAM (15/100 risk score). Your funds are safe." },
 ];
 
+const messages2 = [
+  { role: "user", content: "Create a video with Sora AI showing a futuristic cityscape at sunset" },
+  { role: "assistant", content: "Connecting to Sora AI API via x402...\nRequest: Create video\nPrompt: futuristic cityscape at sunset\nBudget: $50" },
+  { role: "assistant", content: "✅ Video generation started\nEstimated completion: 45 seconds\nVault paid: 500 x402 tokens" },
+];
+
+const messages3 = [
+  { role: "user", content: "Access the X API to find me a tweet about Solana" },
+  { role: "assistant", content: "Querying X API via x402 gateway...\nSearch: Solana\nFilters: Recent, verified accounts\nBudget: $10" },
+  { role: "assistant", content: "✅ Found 50 recent Solana tweets\nTop result from @solana\nVault paid: 100 x402 tokens" },
+];
+
+const messages4 = [
+  { role: "user", content: "Access the Helius API to get my wallet balance" },
+  { role: "assistant", content: "Connecting to Helius API via x402...\nEndpoint: /balance\nWallet: Your connected wallet\nBudget: $5" },
+  { role: "assistant", content: "✅ Balance retrieved successfully\nUSDC: $0.00\nSOL: 1.25\nVault paid: 50 x402 tokens" },
+];
+
+const traces = [
+  [
+    { function: "query_x402_bazaar", server_url: "scam-example.invalid", filter: "mint" },
+    { decision: "deny", risk_level: "critical", detected: "scam" }
+  ],
+  [
+    { function: "create_video_sora", prompt: "futuristic cityscape at sunset", model: "sora-v1" },
+    { status: "generating", video_id: "sora_12345", cost: "500 tokens" }
+  ],
+  [
+    { function: "search_tweets", api: "x_api", query: "Solana", filters: "recent,verified" },
+    { results: 50, top_tweet: "@solana: Solana updates...", cost: "100 tokens" }
+  ],
+  [
+    { function: "get_balance", api: "helius_api", endpoint: "/balance" },
+    { balance_usdc: "$0.00", balance_sol: "1.25", cost: "50 tokens" }
+  ]
+];
+
+const tabConfigs = [
+  { name: "Token Mint", messages, traceData: traces[0] },
+  { name: "Sora AI Video", messages: messages2, traceData: traces[1] },
+  { name: "X API Tweet", messages: messages3, traceData: traces[2] },
+  { name: "Helius API", messages: messages4, traceData: traces[3] },
+];
+
 export default function Home() {
+  const [activeTab, setActiveTab] = useState(0);
+  const activeConfig = tabConfigs[activeTab];
+
   return (
     <div>
-      <CelestialMatrixShader />
+      <ShaderBackground />
       {/* Blur overlay on top of the matrix shader */}
-      <div className="fixed inset-0 z-0 backdrop-blur-sm bg-black/30 pointer-events-none"></div>
+      <div className="fixed inset-0 z-0 backdrop-blur-xl bg-black/30 pointer-events-none"></div>
       <div className=" w-screen relative overflow-x-hidden">
         <div className="relative z-20 flex items-center justify-center px-6 min-h-screen text-center">
-          <div className="space-y-4 max-w-3xl mx-auto w-full">
+          <div className="space-y-4 max-w-5xl mx-auto w-full">
           <h1 className="font-sans text-white text-5xl md:text-6xl font-bold tracking-tight">x402 Agent Gateway</h1>
           <p className="font-mono text-white/80 text-base md:text-lg">Your AI agents can access paid x402 APIs - we pay the fees from our shared vault</p>
           
+          {/* Tab Navigation */}
+          <div className="flex gap-3 mt-8 justify-center flex-wrap">
+            {tabConfigs.map((tab, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveTab(idx)}
+                className={`px-6 py-2.5 rounded-lg font-mono text-sm transition-all ${
+                  activeTab === idx
+                    ? 'bg-white/25 text-white border-0 shadow-lg'
+                    : 'bg-white/5 text-white/60 border border-white/15 hover:bg-white/10'
+                }`}
+              >
+                {tab.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Display active combo */}
           <div className="flex gap-6 mt-8 justify-center">
             <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-4 shadow-xl w-80">
               <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/10">
@@ -30,7 +99,7 @@ export default function Home() {
                 <span className="font-mono text-white/60 text-xs">Agent</span>
               </div>
               <div className="space-y-3 max-h-60 overflow-y-auto">
-                {messages.map((msg, idx) => (
+                {activeConfig.messages.map((msg: any, idx: number) => (
                   <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[85%] rounded-lg px-3 py-2 ${
                       msg.role === "user" 
@@ -50,12 +119,13 @@ export default function Home() {
                 <span className="font-mono text-white/60 text-xs">Agent Trace</span>
               </div>
               <div className="space-y-3 max-h-60 overflow-y-auto">
-                <div className="bg-black/20 rounded p-2 text-left">
-                  <pre className="text-xs font-mono text-white/80 whitespace-pre-wrap break-words overflow-x-auto text-left">{"{\n  \"function\": \"query_x402_bazaar\",\n  \"server_url\": \"scam-example.invalid\",\n  \"filter\": \"mint\"\n}"}</pre>
-                </div>
-                <div className="bg-black/20 rounded p-2 text-left">
-                  <pre className="text-xs font-mono text-white/80 whitespace-pre-wrap break-words overflow-x-auto text-left">{"{\n  \"decision\": \"deny\",\n  \"risk_level\": \"critical\",\n  \"detected\": \"scam\"\n}"}</pre>
-                </div>
+                {activeConfig.traceData.map((trace: any, idx: number) => (
+                  <div key={idx} className="bg-black/20 rounded p-2 text-left">
+                    <pre className="text-xs font-mono text-white/80 whitespace-pre-wrap break-words overflow-x-auto text-left">
+                      {JSON.stringify(trace, null, 2)}
+                    </pre>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
