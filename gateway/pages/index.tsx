@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 import VaultBalance from '../components/VaultBalance';
 import { DottedSurface } from '@/components/dotted-surface';
 
 export default function Home() {
+  const router = useRouter();
   const [jsonInput, setJsonInput] = useState('');
   const [endpoint, setEndpoint] = useState('');
   const [loading, setLoading] = useState(false);
@@ -74,6 +76,13 @@ export default function Home() {
           <p className={styles.subtitle} style={{fontSize: '0.9em', marginTop: '12px', color: '#9ca3af'}}>
             Vault funded by token trading fees • After week 1: Twitter verification required
           </p>
+          <button 
+            onClick={() => router.push('/demo')} 
+            className={styles.demoBtn}
+            style={{marginTop: '15px'}}
+          >
+            🎮 Try Interactive Demo
+          </button>
         </header>
 
         <VaultBalance />

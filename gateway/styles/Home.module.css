@@ -59,6 +59,23 @@
   font-family: 'Courier New', monospace;
 }
 
+.demoBtn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1em;
+  transition: all 0.3s;
+}
+
+.demoBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+}
+
 .mainContent {
   display: grid;
   grid-template-columns: 1fr 1fr;
