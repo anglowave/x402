@@ -6,21 +6,21 @@
 [![Solana](https://img.shields.io/badge/Solana-Devnet%20%7C%20Mainnet-purple.svg)](https://solana.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## 🚀 What is x402?
+## What is x402?
 
 x402 is an **HTTP-native payment protocol** that enables micropayments for web resources using the HTTP 402 "Payment Required" status code. This implementation brings the power of x402 to **Solana**, allowing you to:
 
-- 💰 **Monetize APIs** with pay-per-request pricing
-- 🔐 **Protect premium content** with automatic payment verification
-- ⚡ **Process instant micropayments** on Solana (400ms finality)
-- 🌐 **Build HTTP-native payment flows** using standard HTTP
-- 🎯 **Support multiple tokens** (SOL, USDC, USDT, BONK, WIF, custom SPL tokens)
+- **Monetize APIs** with pay-per-request pricing
+- **Protect premium content** with automatic payment verification
+- **Process instant micropayments** on Solana (400ms finality)
+- **Build HTTP-native payment flows** using standard HTTP
+- **Support multiple tokens** (SOL, USDC, USDT, BONK, WIF, custom SPL tokens)
 
-## 📦 Implementations
+## Implementations
 
-### Python Implementation 🐍
+### Python Implementation
 
-**Status**: ✅ Complete and Production Ready
+**Status**: Complete and Production Ready
 
 A full-featured Python implementation with support for Flask, FastAPI, and other web frameworks.
 
@@ -49,13 +49,13 @@ def premium():
     return {"data": "This costs 0.001 SOL!"}
 ```
 
-**[📚 Full Python Documentation →](python/README.md)**
+**[Full Python Documentation](python/README.md)**
 
 ### TypeScript Implementation (Coming Soon)
 
 The TypeScript implementation is planned and will provide similar functionality for Node.js applications.
 
-## 🎯 Use Cases
+## Use Cases
 
 ### 1. **API Monetization**
 Charge per API request with automatic payment verification.
@@ -90,30 +90,30 @@ def compute(complexity):
 ### 4. **Micropayment Streaming**
 Enable streaming payments for continuous services.
 
-## 🌟 Features
+## Features
 
 ### Core Protocol
-- ✅ HTTP 402 Payment Required responses
-- ✅ Payment request creation and signing
-- ✅ Nonce-based replay attack prevention
-- ✅ Signature verification
-- ✅ Automatic payment processing
+- HTTP 402 Payment Required responses
+- Payment request creation and signing
+- Nonce-based replay attack prevention
+- Signature verification
+- Automatic payment processing
 
 ### Solana Integration
-- ✅ SOL transfers (native token)
-- ✅ SPL token transfers (USDC, USDT, BONK, WIF, custom)
-- ✅ Transaction signing and confirmation
-- ✅ Balance checking
-- ✅ Devnet, testnet, and mainnet support
+- SOL transfers (native token)
+- SPL token transfers (USDC, USDT, BONK, WIF, custom)
+- Transaction signing and confirmation
+- Balance checking
+- Devnet, testnet, and mainnet support
 
 ### Web Framework Support
-- ✅ Flask middleware with decorators
-- ✅ FastAPI middleware with dependency injection
-- ✅ Generic middleware for other frameworks
-- ✅ Automatic payment verification
-- ✅ Payment challenge generation
+- Flask middleware with decorators
+- FastAPI middleware with dependency injection
+- Generic middleware for other frameworks
+- Automatic payment verification
+- Payment challenge generation
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -164,7 +164,7 @@ python python/examples/fastapi_server.py
 python python/examples/client_request.py
 ```
 
-## 📚 Documentation
+## Documentation
 
 ### Python Implementation
 - [**README**](python/README.md) - Full documentation and API reference
@@ -177,7 +177,7 @@ python python/examples/client_request.py
 - [**Whitepaper**](x402-whitepaper.pdf) - Technical specification and architecture
 - [**x402 Protocol Spec**](https://docs.payai.network/x402/reference) - Official protocol documentation
 
-## 🛠️ How It Works
+## How It Works
 
 ### Payment Flow
 
@@ -206,7 +206,7 @@ python python/examples/client_request.py
    {"data": "premium content"}
 ```
 
-## 🔒 Security
+## Security
 
 - **Nonce-based replay protection** - Each payment uses a unique nonce
 - **Signature verification** - All payments are cryptographically signed
@@ -214,7 +214,7 @@ python python/examples/client_request.py
 - **Secure key management** - Examples for environment variables and key vaults
 - **Input validation** - All inputs are validated before processing
 
-## 🌐 Supported Tokens
+## Supported Tokens
 
 - **SOL** - Native Solana token
 - **USDC** - USD Coin
@@ -223,7 +223,7 @@ python python/examples/client_request.py
 - **WIF** - Dogwifhat
 - **Custom SPL Tokens** - Any SPL token via mint address
 
-## 📊 Why x402 on Solana?
+## Why x402 on Solana?
 
 | Feature | Traditional Payments | x402 on Solana |
 |---------|---------------------|----------------|
@@ -234,7 +234,7 @@ python python/examples/client_request.py
 | **Reversibility** | Chargebacks | Final |
 | **Global** | Limited | Worldwide |
 
-## 🛣️ Roadmap
+## Roadmap
 
 ### Current (v0.1.0)
 - [x] Python implementation
@@ -259,7 +259,7 @@ python python/examples/client_request.py
 - [ ] GraphQL support
 - [ ] WebSocket payments
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](python/CONTRIBUTING.md) for details.
 
@@ -271,39 +271,33 @@ We welcome contributions! Please see our [Contributing Guide](python/CONTRIBUTIN
 - Documentation improvements
 - Bug fixes and testing
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](python/LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [**Coinbase**](https://github.com/coinbase/x402) - Original x402 protocol specification
 - [**Solana Foundation**](https://solana.com/) - High-performance blockchain infrastructure
 - [**solana-py**](https://github.com/michaelhly/solana-py) - Python Solana SDK
 
-## 📞 Support
+## Support
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/HaidarIDK/x402/issues)
-- **Documentation**: [Full documentation](https://github.com/HaidarIDK/x402/tree/main/python)
-- **Examples**: [Code examples](https://github.com/HaidarIDK/x402/tree/main/python/examples)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/anglowave/x402/issues)
+- **Documentation**: [Full documentation](https://github.com/anglowave/x402/tree/main/python)
+- **Examples**: [Code examples](https://github.com/anglowave/x402/tree/main/python/examples)
 
-## 🌟 Star Us!
-
-If you find x402 useful, please consider giving us a star ⭐ on GitHub!
-
-## 🔗 Links
+## Links
 
 - [x402 Protocol Specification](https://docs.payai.network/x402/reference)
 - [Solana Documentation](https://docs.solana.com/)
-- [Python Implementation](https://github.com/HaidarIDK/x402/tree/main/python)
+- [Python Implementation](https://github.com/anglowave/x402/tree/main/python)
 - [Coinbase x402](https://github.com/coinbase/x402)
 
 ---
 
-**Built with ❤️ for the Solana ecosystem**
+**Built for the Solana ecosystem**
 
-*Enable micropayments. Build the future of web monetization.*
-
-**Ready to monetize your APIs? [Get Started →](python/QUICKSTART.md)**
+Enable micropayments. Build the future of web monetization.
 
 

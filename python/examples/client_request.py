@@ -29,7 +29,7 @@ def make_paid_request(url: str, client: X402Client):
     response = requests.get(url)
     
     if response.status_code == 402:
-        print("   ✓ Received 402 Payment Required")
+        print("   Received 402 Payment Required")
         
         # Extract payment challenge
         payment_challenge = json.loads(
@@ -60,25 +60,25 @@ def make_paid_request(url: str, client: X402Client):
         response = requests.get(url, headers=headers)
         
         if response.status_code == 200:
-            print("   ✓ Payment accepted!")
+            print("   Payment accepted!")
             print(f"\n5. Response:")
             data = response.json()
             print(json.dumps(data, indent=2))
             return data
         else:
-            print(f"   ✗ Request failed: {response.status_code}")
+            print(f"   Request failed: {response.status_code}")
             print(f"   Error: {response.text}")
             return None
     
     elif response.status_code == 200:
-        print("   ✓ No payment required (free endpoint)")
+        print("   No payment required (free endpoint)")
         data = response.json()
         print(f"\nResponse:")
         print(json.dumps(data, indent=2))
         return data
     
     else:
-        print(f"   ✗ Unexpected status code: {response.status_code}")
+        print(f"   Unexpected status code: {response.status_code}")
         print(f"   Response: {response.text}")
         return None
 
@@ -104,7 +104,7 @@ def main():
         print(f"Balance: {balance:.4f} SOL")
         
         if balance < 0.001:
-            print("\n⚠ Warning: Low balance! You may need to fund your wallet.")
+            print("\nWarning: Low balance! You may need to fund your wallet.")
             print(f"   Send SOL to: {keypair.pubkey()}")
             print(f"   Get devnet SOL: https://faucet.solana.com/")
     except Exception as e:
