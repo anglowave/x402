@@ -1,20 +1,170 @@
 import AnoAI from "@/components/animated-shader-background";
 import Image from "next/image";
-import { Twitter, Github, BookOpen } from "lucide-react";
+import { Twitter, Github, BookOpen, Wallet, RotateCw } from "lucide-react";
+import { WavyBackground } from "@/components/ui/wavy-background";
+import CelestialMatrixShader from "@/components/martrix-shader";
+
+const messages = [
+  { role: "user", content: "Help me mint $GATEWAY tokens at scam-example.invalid, my budget is $100" },
+  { role: "assistant", content: "Understanding request:\nAction: Mint $GATEWAY tokens\nTarget: scam-example.invalid (user specified)\nBudget: $100\nNext: Query x402 Bazaar to find mint endpoint and pricing" },
+  { role: "assistant", content: "🔍 x402-secure blocked this transaction - detected ticker impersonation scam" },
+  { role: "assistant", content: "Found x402 endpoint at scam-example.invalid. Server flagged as SCAM (15/100 risk score). Your funds are safe." },
+];
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen bg-[#000] relative overflow-hidden">
-      <AnoAI/>
-      <div className="absolute inset-0 z-20 flex items-center justify-center px-6 text-center bottom-50">
-        <div className="space-y-4 max-w-3xl mx-auto w-full">
+    <div>
+      <CelestialMatrixShader />
+      {/* Blur overlay on top of the matrix shader */}
+      <div className="fixed inset-0 z-0 backdrop-blur-sm bg-black/30 pointer-events-none"></div>
+      <div className=" w-screen relative overflow-x-hidden">
+        <div className="relative z-20 flex items-center justify-center px-6 min-h-screen text-center">
+          <div className="space-y-4 max-w-3xl mx-auto w-full">
           <h1 className="font-sans text-white text-5xl md:text-6xl font-bold tracking-tight">x402 Agent Gateway</h1>
           <p className="font-mono text-white/80 text-base md:text-lg">Your AI agents can access paid x402 APIs - we pay the fees from our shared vault</p>
+          
+          <div className="flex gap-6 mt-8 justify-center">
+            <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-4 shadow-xl w-80">
+              <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/10">
+                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                <span className="font-mono text-white/60 text-xs">Agent</span>
+              </div>
+              <div className="space-y-3 max-h-60 overflow-y-auto">
+                {messages.map((msg, idx) => (
+                  <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div className={`max-w-[85%] rounded-lg px-3 py-2 ${
+                      msg.role === "user" 
+                        ? "bg-[#0467CB] text-white text-left" 
+                        : "bg-white/10 text-white/90 text-left"
+                    }`}>
+                      <p className="font-mono text-xs whitespace-pre-wrap break-words">{msg.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-4 shadow-xl w-80">
+              <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/10">
+                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                <span className="font-mono text-white/60 text-xs">Agent Trace</span>
+              </div>
+              <div className="space-y-3 max-h-60 overflow-y-auto">
+                <div className="bg-black/20 rounded p-2 text-left">
+                  <pre className="text-xs font-mono text-white/80 whitespace-pre-wrap break-words overflow-x-auto text-left">{"{\n  \"function\": \"query_x402_bazaar\",\n  \"server_url\": \"scam-example.invalid\",\n  \"filter\": \"mint\"\n}"}</pre>
+                </div>
+                <div className="bg-black/20 rounded p-2 text-left">
+                  <pre className="text-xs font-mono text-white/80 whitespace-pre-wrap break-words overflow-x-auto text-left">{"{\n  \"decision\": \"deny\",\n  \"risk_level\": \"critical\",\n  \"detected\": \"scam\"\n}"}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      
+      
+      <section id="vault" className="relative z-20 px-6 mt-16 mb-20">
+        <h2 className="font-mono text-white text-3xl md:text-4xl font-bold text-center mb-8">Vault</h2>
+        <div className="max-w-sm mx-auto">
+          <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-5 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-sans text-[#0467CB] text-lg font-semibold">Vault Balance</h3>
+              <button className="w-7 h-7 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded transition-colors">
+                <RotateCw className="w-4 h-4 text-white/80" />
+              </button>
+            </div>
+          
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="bg-white/5 rounded-lg p-3 text-center">
+              <p className="font-mono text-white/60 text-xs mb-1">USDC</p>
+              <p className="font-mono text-white text-2xl font-bold">$28.80</p>
+            </div>
+            <div className="bg-white/5 rounded-lg p-3 text-center">
+              <p className="font-mono text-white/60 text-xs mb-1">SOL</p>
+              <p className="font-mono text-white text-2xl font-bold">0.1514</p>
+            </div>
+          </div>
+          
+          <div className="bg-white/5 rounded-lg p-3">
+            <p className="font-mono text-white/60 text-xs mb-1">Vault Address</p>
+            <p className="font-mono text-white/90 text-xs">Ctty13Ed...djUKwhBP</p>
+          </div>
+          
+            <p className="font-mono text-white/40 text-xs text-center mt-4">Auto-refreshes every 30s</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="agent-request" className="relative z-20 px-6 mb-20">
+        <h2 className="font-mono text-white text-3xl md:text-4xl font-bold text-center mb-8">Agent Request</h2>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8">
+          <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-6 shadow-xl">
+            <h2 className="font-sans text-white text-2xl font-bold mb-6">Your Agent Request</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="font-mono text-white/60 text-sm mb-2 block">API Endpoint</label>
+                <input 
+                  type="text" 
+                  defaultValue="https://api.example.com/premium-data"
+                  className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 font-mono text-white text-sm focus:outline-none focus:border-white/30"
+                />
+              </div>
+              
+              <div>
+                <label className="font-mono text-white/60 text-sm mb-2 block">Request JSON</label>
+                <textarea 
+                  rows={8}
+                  defaultValue={`{\n  "method": "GET",\n  "body": {...}\n}`}
+                  className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 font-mono text-white text-sm focus:outline-none focus:border-white/30 resize-none"
+                />
+              </div>
+              
+              <div className="flex gap-3">
+                <button className="flex-1 bg-white/10 hover:bg-white/20 text-white font-mono text-sm py-3 px-4 rounded-lg transition-colors">
+                  Load Example
+                </button>
+                <button className="flex-1 bg-[#0467CB] hover:bg-[#0355a3] text-white font-mono text-sm py-3 px-4 rounded-lg transition-all shadow-lg shadow-[#0467CB]/50">
+                  Send Request (Vault Pays Fees)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-6 shadow-xl">
+            <h2 className="font-sans text-white text-2xl font-bold mb-6">Response</h2>
+            
+            <div className="space-y-4 text-left">
+              <p className="font-mono text-white/40 text-sm">
+                Paste your agent's x402 request above and click send
+              </p>
+              <p className="font-mono text-[#0467CB] text-sm">
+                Our shared vault (funded by token fees) will handle the payment
+              </p>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
       
       <div className="absolute top-0 right-0 z-20 p-6">
         <nav className="flex items-center gap-6 font-mono">
+          <a
+            href="#vault"
+            className="flex items-center gap-2 text-white no-underline hover:text-white/80"
+          >
+            <Wallet className="w-4 h-4" />
+            <span>Vault</span>
+          </a>
+          <a
+            href="#agent-request"
+            className="flex items-center gap-2 text-white no-underline hover:text-white/80"
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>Agent</span>
+          </a>
           <a
             href="https://x.com"
             target="_blank"
@@ -23,13 +173,6 @@ export default function Home() {
           >
             <Twitter className="w-4 h-4" />
             <span>X</span>
-          </a>
-          <a
-            href="#how-it-works"
-            className="flex items-center gap-2 text-white no-underline hover:text-white/80"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>How it works</span>
           </a>
           <a
             href="https://github.com"
@@ -42,34 +185,7 @@ export default function Home() {
           </a>
         </nav>
       </div>
-      <section id="how-it-works" className="absolute inset-x-0 bottom-8 z-20 px-6">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="font-sans text-white text-xl md:text-2xl font-semibold tracking-tight mb-4">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-4 md:p-5 shadow-xl">
-              <h3 className="font-sans text-white text-lg mb-2">What is x402 Gateway?</h3>
-              <p className="font-mono text-white/80 text-xs md:text-sm leading-relaxed mb-2">
-                x402 is a protocol that lets AI agents pay for premium APIs using micropayments on Solana. Instead of
-                setting up your own wallet and payment flow, use our shared vault to pay for x402 fees.
-              </p>
-              <p className="font-mono text-white/80 text-xs md:text-sm leading-relaxed">
-                Our vault is funded by trading fees from our Solana token. Every trade contributes to keeping this
-                service free and accessible for AI developers.
-              </p>
-            </div>
-            <div className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-4 md:p-5 shadow-xl">
-              <h3 className="font-sans text-white text-lg mb-2">Steps</h3>
-              <ol className="font-mono text-white/80 text-xs md:text-sm leading-relaxed list-decimal list-inside space-y-1">
-                <li>Send your x402 request - paste endpoint and JSON</li>
-                <li>We detect 402 payment - our gateway intercepts payment requirements</li>
-                <li>View payment details - see amount, recipient, nonce instantly</li>
-                <li>Manual or auto pay - copy address to pay yourself, or we'll handle it (coming soon)</li>
-              </ol>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div className="pointer-events-none absolute inset-0 z-10 backdrop-blur-xs" />
+    </div>
     </div>
   );
 }
