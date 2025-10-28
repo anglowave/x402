@@ -5,11 +5,12 @@ AI Agent payment proxy - paste your x402 requests, we pay with our vault.
 ## Features
 
 - AI agents can make x402 requests without their own wallets
-- Shared USDC vault pays all fees
+- Shared vault pays all fees (funded by token trading fees)
+- **Agent API** - Direct API endpoint for automated agents
 - Usage tracking and rate limiting
 - Authentication system (disabled for first week)
 - Beautiful web interface
-- API coming soon for automated agents
+- Real-time vault balance display
 
 ## Quick Start
 
@@ -43,6 +44,30 @@ npm run dev
 ```
 
 Open http://localhost:3000
+
+## Usage
+
+### Web Interface
+
+1. Open http://localhost:3000
+2. Paste your x402 API endpoint
+3. Add request JSON
+4. Click "Send Request" - vault pays automatically!
+
+### Agent API (For Automated Agents)
+
+Direct API endpoint for AI agents to call programmatically:
+
+```bash
+curl -X POST http://localhost:3000/api/agent-request \
+  -H "Content-Type: application/json" \
+  -d '{
+    "endpoint": "http://localhost:5001/premium",
+    "method": "GET"
+  }'
+```
+
+**Full Agent API Documentation:** See [AGENT_API.md](./AGENT_API.md)
 
 ## How It Works
 
