@@ -1,237 +1,173 @@
-# x402 - HTTP 402 Payment Protocol for Solana
+# x402 Agent Gateway
 
-> Enable micropayments for web resources using HTTP-native payment protocol on Solana
+> AI agents can access paid x402 APIs - we pay the fees from our shared vault
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![Solana](https://img.shields.io/badge/Solana-Devnet%20%7C%20Mainnet-purple.svg)](https://solana.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0-black.svg)](https://nextjs.org/)
+[![Solana](https://img.shields.io/badge/Solana-Mainnet-purple.svg)](https://solana.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## What is x402?
+## What is x402 Agent Gateway?
 
-x402 is an **HTTP-native payment protocol** that enables micropayments for web resources using the HTTP 402 "Payment Required" status code. This implementation brings the power of x402 to **Solana**, allowing you to:
+x402 Agent Gateway is a web application that enables AI agents to access paid APIs using the x402 payment protocol. Our shared vault automatically handles all payments, so your agents can focus on their tasks without managing wallets or transaction fees.
 
-- **Monetize APIs** with pay-per-request pricing
-- **Protect premium content** with automatic payment verification
-- **Process instant micropayments** on Solana (400ms finality)
-- **Build HTTP-native payment flows** using standard HTTP
-- **Support multiple tokens** (SOL, USDC, USDT, BONK, WIF, custom SPL tokens)
-
-## Implementations
-
-### Python Implementation
-
-**Status**: Complete and Production Ready
-
-A full-featured Python implementation with support for Flask, FastAPI, and other web frameworks.
-
-### x402 Gateway
-
-**Status**: Beta
-
-A web application that allows users to make x402 payment requests without needing their own wallet. The gateway uses a shared Solana vault to handle all payments. Perfect for testing and demos.
-
-Location: `/gateway`
-
-```bash
-cd python
-pip install -r requirements.txt
-pip install -e .
-```
-
-**Quick Example:**
-
-```python
-from flask import Flask
-from solders.keypair import Keypair
-from x402 import X402Client
-from x402.middleware import FlaskX402Middleware
-
-app = Flask(__name__)
-keypair = Keypair()
-client = X402Client(keypair)
-x402 = FlaskX402Middleware(app, client)
-
-@app.route('/premium')
-@x402.require_payment(amount=0.001)
-def premium():
-    return {"data": "This costs 0.001 SOL!"}
-```
-
-**[Full Python Documentation](python/README.md)**
-
-### TypeScript Implementation (Coming Soon)
-
-The TypeScript implementation is planned and will provide similar functionality for Node.js applications.
-
-## Use Cases
-
-### 1. **API Monetization**
-Charge per API request with automatic payment verification.
-
-```python
-@app.route('/api/ai-inference')
-@x402.require_payment(amount=0.001)
-def ai_inference():
-    return run_ai_model()
-```
-
-### 2. **Premium Content**
-Protect premium content behind micropayments.
-
-```python
-@app.route('/premium-article/<id>')
-@x402.require_payment(amount=0.005)
-def premium_article(id):
-    return get_article(id)
-```
-
-### 3. **Pay-Per-Use Services**
-Build services that charge based on usage.
-
-```python
-@app.route('/compute/<complexity>')
-@x402.require_payment(amount=0.01)
-def compute(complexity):
-    return execute_task(complexity)
-```
-
-### 4. **Micropayment Streaming**
-Enable streaming payments for continuous services.
+**Live Demo**: [Coming Soon]
 
 ## Features
 
-### Core Protocol
-- HTTP 402 Payment Required responses
-- Payment request creation and signing
-- Nonce-based replay attack prevention
-- Signature verification
-- Automatic payment processing
+- ✅ **Automatic Payments** - Shared vault pays x402 API fees automatically
+- ✅ **Multiple Demos** - Sora AI Video, X API Tweets, Helius Blockchain Data
+- ✅ **Real-time Transactions** - All payments processed on Solana mainnet
+- ✅ **Agent Trace Viewer** - See exactly how AI agents make payment decisions
+- ✅ **No Wallet Needed** - Users don't need their own crypto wallet
+- ✅ **USDC & SOL Support** - Pay with stablecoins or native Solana tokens
 
-### Solana Integration
-- SOL transfers (native token)
-- SPL token transfers (USDC, USDT, BONK, WIF, custom)
-- Transaction signing and confirmation
-- Balance checking
-- Devnet, testnet, and mainnet support
+## Architecture
 
-### Web Framework Support
-- Flask middleware with decorators
-- FastAPI middleware with dependency injection
-- Generic middleware for other frameworks
-- Automatic payment verification
-- Payment challenge generation
+### Frontend (Next.js)
+- **Location**: `frontend/x402-agent-gateway/`
+- **Tech Stack**: Next.js 16, React 19, Tailwind CSS 4, TypeScript
+- **Features**: 
+  - Interactive demo interface with 3 AI agent scenarios
+  - Real-time payment processing
+  - Agent conversation simulator
+  - Payment trace visualization
+
+### Backend (Python Flask)
+- **Location**: `gateway/`
+- **Tech Stack**: Flask, Solana Web3, SPL Token
+- **Features**:
+  - x402 payment proxy server
+  - Shared vault management
+  - Transaction signing and confirmation
+  - Multi-token support (SOL, USDC, USDT, etc.)
 
 ## Quick Start
 
-### Installation
+### Prerequisites
+- Node.js 18+ (for frontend)
+- Python 3.8+ (for backend)
+- Solana wallet with SOL and USDC (for vault)
+
+### Frontend Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/HaidarIDK/x402.git
-cd x402/python
+cd frontend/x402-agent-gateway
+npm install
+npm run dev
+```
 
-# Install dependencies
+Visit `http://localhost:3000`
+
+### Backend Setup
+
+```bash
+cd gateway
 pip install -r requirements.txt
-pip install -e .
+python server.py
 ```
 
-### Basic Usage
+Backend runs on `http://localhost:5000`
 
-```python
-from solders.keypair import Keypair
-from x402 import X402Client, TokenType
+### Environment Variables
 
-# Initialize client
-keypair = Keypair()
-client = X402Client(keypair, rpc_url="https://api.devnet.solana.com")
+Create `.env.local` in `frontend/x402-agent-gateway/`:
 
-# Create a payment request
-payment = client.create_payment_request(
-    amount=0.001,
-    recipient="recipient_pubkey",
-    resource="/api/premium-content",
-    token=TokenType.SOL
-)
+```env
+# Test Wallet Addresses
+NEXT_PUBLIC_TEST_WALLET_1=your_wallet_1
+NEXT_PUBLIC_TEST_WALLET_2=your_wallet_2
+NEXT_PUBLIC_TEST_WALLET_3=your_wallet_3
+NEXT_PUBLIC_TEST_WALLET_4=your_wallet_4
+NEXT_PUBLIC_TEST_WALLET_5=your_wallet_5
+NEXT_PUBLIC_TEST_WALLET_6=your_wallet_6
+NEXT_PUBLIC_TEST_WALLET_7=your_wallet_7
 
-# Process the payment
-response = client.process_payment(payment)
-if response.success:
-    print(f"Payment successful! TX: {response.transaction_signature}")
+# Contract Address
+NEXT_PUBLIC_CONTRACT_ADDRESS=your_contract_address
+
+# Vault Configuration (Backend)
+VAULT_PRIVATE_KEY=your_vault_private_key_base58
+SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+SOLANA_NETWORK=mainnet-beta
 ```
 
-### Run Examples
+See `env.example` for more details.
+
+## Deployment
+
+### Deploy to Render
+
+We provide a complete deployment configuration for Render:
+
+1. Push code to GitHub
+2. Connect repository to Render
+3. Use the `render.yaml` blueprint
+4. Add environment variables
+5. Deploy!
+
+See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for detailed instructions.
+
+### Deploy to Vercel (Frontend Only)
 
 ```bash
-# Start Flask server
-python python/examples/flask_server.py
-
-# Start FastAPI server
-python python/examples/fastapi_server.py
-
-# Run client example
-python python/examples/client_request.py
+cd frontend/x402-agent-gateway
+vercel deploy
 ```
-
-## Documentation
-
-### Python Implementation
-- [**README**](python/README.md) - Full documentation and API reference
-- [**Quick Start**](python/QUICKSTART.md) - 5-minute getting started guide
-- [**Examples**](python/examples/) - Working examples for Flask, FastAPI, and clients
-- [**Contributing**](python/CONTRIBUTING.md) - How to contribute
-- [**Deployment**](python/DEPLOYMENT.md) - Production deployment guide
-
-### Additional Resources
-- [**Whitepaper**](x402-whitepaper.pdf) - Technical specification and architecture
-- [**x402 Protocol Spec**](https://docs.payai.network/x402/reference) - Official protocol documentation
 
 ## How It Works
 
 ### Payment Flow
 
 ```
-1. Client requests protected resource
-   GET /premium-content
-   
-2. Server responds with 402 Payment Required
-   HTTP/1.1 402 Payment Required
-   X-Payment-Challenge: {"amount": 0.001, "recipient": "...", "nonce": "..."}
-   
-3. Client creates and signs payment
-   payment = client.create_payment_request(...)
-   
-4. Client retries with payment
-   GET /premium-content
-   X-Payment-Request: {"amount": 0.001, "signature": "...", ...}
-   
-5. Server verifies and processes payment
-   - Verify signature
-   - Process Solana transaction
-   - Grant access to resource
-   
-6. Client receives protected content
-   HTTP/1.1 200 OK
-   {"data": "premium content"}
+1. User selects a demo (e.g., "Sora AI Video")
+2. AI agent searches for the API endpoint
+3. Agent checks pricing ($0.50 USDC for video generation)
+4. Agent prepares x402 payment request
+5. Shared vault automatically pays the fee
+6. API processes request and returns result
+7. User sees the complete trace and payment details
 ```
 
-## Security
+### x402 Protocol
 
-- **Nonce-based replay protection** - Each payment uses a unique nonce
-- **Signature verification** - All payments are cryptographically signed
-- **Timestamp expiry** - Payments expire after a configurable time
-- **Secure key management** - Examples for environment variables and key vaults
-- **Input validation** - All inputs are validated before processing
+x402 is an HTTP-native payment protocol that uses the `402 Payment Required` status code:
 
-## Supported Tokens
+```
+Client → API: GET /generate-video
+API → Client: 402 Payment Required
+              X-Payment-Challenge: {"amount": 0.50, "recipient": "..."}
+Client → API: GET /generate-video
+              X-Payment-Request: {"signature": "...", "tx": "..."}
+API → Client: 200 OK
+              {"video_url": "..."}
+```
 
-- **SOL** - Native Solana token
-- **USDC** - USD Coin
-- **USDT** - Tether USD
-- **BONK** - Bonk memecoin
-- **WIF** - Dogwifhat
-- **Custom SPL Tokens** - Any SPL token via mint address
+## Demos
 
-## Why x402 on Solana?
+### 1. Sora AI Video Generation
+- **Service**: AI video generation from text prompts
+- **Cost**: $0.50 USDC per video
+- **Demo**: Generate a 5-10 second 1080p video
+
+### 2. X API Tweet Search
+- **Service**: Search recent tweets from verified accounts
+- **Cost**: $0.10 USDC per search
+- **Demo**: Find 50 tweets about Solana
+
+### 3. Helius API Wallet Balance
+- **Service**: Query Solana wallet balances and tokens
+- **Cost**: $0.05 USDC per query
+- **Demo**: Check wallet SOL and USDC balance
+
+## Vault
+
+Our shared vault automatically pays all x402 fees:
+
+- **Address**: `Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP`
+- **View on Solscan**: [https://solscan.io/account/Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP](https://solscan.io/account/Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP)
+- **Funded by**: Token trading fees
+
+## Why Solana?
 
 | Feature | Traditional Payments | x402 on Solana |
 |---------|---------------------|----------------|
@@ -244,68 +180,70 @@ python python/examples/client_request.py
 
 ## Roadmap
 
-### Current (v0.1.0)
-- [x] Python implementation
-- [x] SOL and SPL token support
-- [x] Flask and FastAPI middleware
-- [x] Comprehensive documentation
-- [x] Example applications
-- [x] Test suite
+### Current (v1.0)
+- ✅ Frontend with 3 demo scenarios
+- ✅ Backend payment proxy
+- ✅ Shared vault system
+- ✅ Real Solana mainnet transactions
+- ✅ USDC and SOL support
 
-### Next (v0.2.0)
-- [ ] TypeScript implementation
-- [ ] Django middleware
-- [ ] Async client support
-- [ ] Payment streaming
-- [ ] Subscription management
+### Next (v1.1)
+- [ ] More AI service demos (Claude, GPT-4, Midjourney)
+- [ ] User wallet connection (optional)
+- [ ] Payment history dashboard
+- [ ] Custom API endpoint support
+- [ ] Webhook notifications
 
 ### Future
-- [ ] CLI tools
-- [ ] Payment analytics dashboard
-- [ ] Webhook support
-- [ ] Multi-signature support
-- [ ] GraphQL support
-- [ ] WebSocket payments
+- [ ] Multi-chain support (Ethereum, Base, Polygon)
+- [ ] Subscription management
+- [ ] Payment analytics
+- [ ] White-label solution
+- [ ] API marketplace
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](python/CONTRIBUTING.md) for details.
+We welcome contributions! Areas we need help:
 
-### Areas We Need Help
-- TypeScript implementation
-- Additional framework integrations (Django, Tornado, etc.)
-- Performance optimizations
-- More examples and tutorials
-- Documentation improvements
-- Bug fixes and testing
+- Additional AI service integrations
+- UI/UX improvements
+- Documentation
+- Testing
+- Bug fixes
 
-## License
+## Security
 
-This project is licensed under the MIT License - see the [LICENSE](python/LICENSE) file for details.
-
-## Acknowledgments
-
-- [**Coinbase**](https://github.com/coinbase/x402) - Original x402 protocol specification
-- [**Solana Foundation**](https://solana.com/) - High-performance blockchain infrastructure
-- [**solana-py**](https://github.com/michaelhly/solana-py) - Python Solana SDK
+- **Vault Security**: Private keys stored securely in environment variables
+- **Transaction Signing**: All transactions signed server-side
+- **Rate Limiting**: Prevents abuse of shared vault
+- **Input Validation**: All user inputs validated and sanitized
 
 ## Support
 
 - **GitHub Issues**: [Report bugs or request features](https://github.com/anglowave/x402/issues)
-- **Documentation**: [Full documentation](https://github.com/anglowave/x402/tree/main/python)
-- **Examples**: [Code examples](https://github.com/anglowave/x402/tree/main/python/examples)
+- **Twitter**: [@saxorita](https://x.com/saxorita)
+- **Documentation**: See `/docs` folder
 
 ## Links
 
 - [x402 Protocol Specification](https://docs.payai.network/x402/reference)
 - [Solana Documentation](https://docs.solana.com/)
-- [Python Implementation](https://github.com/anglowave/x402/tree/main/python)
 - [Coinbase x402](https://github.com/coinbase/x402)
+- [Whitepaper](x402-whitepaper.pdf)
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgments
+
+- [**Coinbase**](https://github.com/coinbase/x402) - Original x402 protocol specification
+- [**Solana Foundation**](https://solana.com/) - High-performance blockchain infrastructure
+- [**x402.org**](https://www.x402.org/) - x402 payment facilitator
+- [**Coinbase Developer Platform**](https://cdp.coinbase.com/) - Payment infrastructure
 
 ---
 
-**Built for the Solana ecosystem**
+**Built for the future of AI and payments**
 
-Enable micropayments. Build the future of web monetization.
-
-
+Enable your AI agents to access the world's APIs. No wallet needed.
