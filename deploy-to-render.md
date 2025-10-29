@@ -1,12 +1,12 @@
 # Quick Deploy to Render
 
-Follow these steps to deploy your x402 application to Render:
+Follow these steps to deploy your x402 Agent Gateway to Render:
 
 ## Step 1: Push to GitHub
 
 ```bash
 git add .
-git commit -m "Add Render deployment configuration"
+git commit -m "Ready for deployment"
 git push origin main
 ```
 
@@ -24,8 +24,6 @@ Go to https://render.com and sign up or log in.
 
 ## Step 4: Add Environment Variables
 
-### For Frontend (x402-agent-gateway):
-
 Go to the service dashboard and add these environment variables:
 
 ```
@@ -40,21 +38,16 @@ NEXT_PUBLIC_CONTRACT_ADDRESS=<your_contract_address>
 VAULT_PRIVATE_KEY=<your_vault_private_key_base58>
 ```
 
-### For Backend (x402-gateway-backend):
-
-```
-VAULT_PRIVATE_KEY=<your_vault_private_key_base58>
-```
+The RPC URL and network are already set in `render.yaml`.
 
 ## Step 5: Deploy
 
 Click **"Deploy"** or wait for automatic deployment to complete.
 
-## Step 6: Get Your URLs
+## Step 6: Get Your URL
 
-After deployment, you'll get two URLs:
+After deployment, you'll get:
 - Frontend: `https://x402-agent-gateway.onrender.com`
-- Backend: `https://x402-gateway-backend.onrender.com`
 
 ## Step 7: Test
 
@@ -68,7 +61,7 @@ Visit your frontend URL and test all three demos:
 ### Free Tier Limitations
 - Services spin down after 15 minutes of inactivity
 - First request after spin-down takes ~30 seconds (cold start)
-- 750 hours/month free per service
+- 750 hours/month free
 
 ### Vault Funding
 Make sure your vault has:
@@ -86,7 +79,7 @@ Fund at: https://solscan.io/account/Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP
 
 **Build fails?**
 - Check the build logs in Render dashboard
-- Verify all dependencies are in package.json/requirements.txt
+- Verify all dependencies are in package.json
 
 **Environment variables not working?**
 - Make sure they're added in Render dashboard, not in code
@@ -101,4 +94,3 @@ Fund at: https://solscan.io/account/Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP
 
 - Render Docs: https://render.com/docs
 - GitHub Issues: https://github.com/anglowave/x402/issues
-

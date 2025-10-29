@@ -1,6 +1,6 @@
-# Deploying x402 to Render
+# Deploying x402 Agent Gateway to Render
 
-This guide will help you deploy both the frontend (Next.js) and backend (Python) to Render.
+This guide will help you deploy the x402 Agent Gateway (Next.js frontend with built-in payment API) to Render.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ This guide will help you deploy both the frontend (Next.js) and backend (Python)
 
 ### Option 1: Deploy Using render.yaml (Recommended)
 
-The `render.yaml` file in the root directory contains all the configuration for both services.
+The `render.yaml` file in the root directory contains all the configuration.
 
 1. **Connect Your Repository to Render**
    - Go to https://dashboard.render.com
@@ -22,7 +22,7 @@ The `render.yaml` file in the root directory contains all the configuration for 
 
 2. **Set Environment Variables**
    
-   For the **Frontend (x402-agent-gateway)**:
+   For **x402-agent-gateway**:
    ```
    NEXT_PUBLIC_TEST_WALLET_1=<wallet_address_1>
    NEXT_PUBLIC_TEST_WALLET_2=<wallet_address_2>
@@ -37,22 +37,11 @@ The `render.yaml` file in the root directory contains all the configuration for 
    SOLANA_NETWORK=mainnet-beta
    ```
 
-   For the **Backend (x402-gateway-backend)**:
-   ```
-   VAULT_PRIVATE_KEY=<your_vault_private_key_base58>
-   SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
-   SOLANA_NETWORK=mainnet-beta
-   PORT=5000
-   FLASK_ENV=production
-   ```
-
 3. **Deploy**
-   - Click "Apply" to deploy both services
+   - Click "Apply" to deploy
    - Render will build and deploy automatically
 
-### Option 2: Deploy Manually (Individual Services)
-
-#### Deploy Frontend
+### Option 2: Deploy Manually
 
 1. Go to https://dashboard.render.com
 2. Click "New" → "Web Service"
@@ -65,25 +54,6 @@ The `render.yaml` file in the root directory contains all the configuration for 
    - **Environment**: `Node`
    - **Build Command**: `npm install && npm run build`
    - **Start Command**: `npm start`
-   - **Plan**: Free
-
-5. Add Environment Variables (see above)
-
-6. Click "Create Web Service"
-
-#### Deploy Backend
-
-1. Go to https://dashboard.render.com
-2. Click "New" → "Web Service"
-3. Connect your repository: `anglowave/x402`
-4. Configure:
-   - **Name**: `x402-gateway-backend`
-   - **Region**: Oregon (US West)
-   - **Branch**: `main`
-   - **Root Directory**: `gateway`
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `python server.py`
    - **Plan**: Free
 
 5. Add Environment Variables (see above)
@@ -133,14 +103,15 @@ Free tier options:
 After deployment:
 1. Check the logs in Render dashboard
 2. Test the frontend at: `https://x402-agent-gateway.onrender.com`
-3. Test the backend at: `https://x402-gateway-backend.onrender.com`
+3. Test the payment API at: `https://x402-agent-gateway.onrender.com/api/send-payment`
 
 ### Troubleshooting
 
 **Build Fails:**
-- Check that all dependencies are in `package.json` or `requirements.txt`
+- Check that all dependencies are in `package.json`
 - Verify the build command is correct
 - Check Render logs for specific errors
+- Make sure Tailwind CSS dependencies are in `dependencies`, not `devDependencies`
 
 **Environment Variables Not Working:**
 - Ensure they're set in Render dashboard, not in code
@@ -151,25 +122,26 @@ After deployment:
 - Verify `VAULT_PRIVATE_KEY` is correct and in base58 format
 - Check vault has sufficient SOL and USDC
 - Verify RPC URL is accessible
+- Check Render logs for error messages
 
 ## Post-Deployment
 
-1. **Update Links**: Update any hardcoded URLs in your code to point to Render URLs
-2. **Test All Demos**: Run through all three demos (Sora AI, X API, Helius)
-3. **Monitor Vault**: Keep an eye on vault balance
-4. **Set Up Alerts**: Configure Render to notify you of deployment failures
+1. **Test All Demos**: Run through all three demos (Sora AI, X API, Helius)
+2. **Monitor Vault**: Keep an eye on vault balance
+3. **Set Up Alerts**: Configure Render to notify you of deployment failures
+4. **Custom Domain** (Optional): Add your own domain in Render settings
 
 ## Costs
 
-- **Free Tier**: Both services can run on Render's free tier
+- **Free Tier**: Service can run on Render's free tier
 - **Limitations**: 
   - Services spin down after 15 minutes of inactivity
-  - 750 hours/month free (enough for 1 service running 24/7)
+  - 750 hours/month free
   - Cold starts take ~30 seconds
 
 - **Paid Plans**: 
-  - Starter: $7/month per service (no spin down)
-  - Standard: $25/month per service (more resources)
+  - Starter: $7/month (no spin down)
+  - Standard: $25/month (more resources)
 
 ## Support
 
@@ -185,4 +157,3 @@ After successful deployment:
 3. Set up custom domain (optional)
 4. Configure monitoring and alerts
 5. Plan for scaling if needed
-

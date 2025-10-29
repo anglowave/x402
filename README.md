@@ -8,7 +8,7 @@
 
 ## What is x402 Agent Gateway?
 
-x402 Agent Gateway is a web application that enables AI agents to access paid APIs using the x402 payment protocol. Our shared vault automatically handles all payments, so your agents can focus on their tasks without managing wallets or transaction fees.
+x402 Agent Gateway is a Next.js web application that enables AI agents to access paid APIs using the x402 payment protocol. Our shared vault automatically handles all payments on Solana, so agents can focus on their tasks without managing wallets or transaction fees.
 
 **Live Demo**: [Coming Soon]
 
@@ -21,59 +21,33 @@ x402 Agent Gateway is a web application that enables AI agents to access paid AP
 - ✅ **No Wallet Needed** - Users don't need their own crypto wallet
 - ✅ **USDC & SOL Support** - Pay with stablecoins or native Solana tokens
 
-## Architecture
+## Tech Stack
 
-### Frontend (Next.js)
-- **Location**: `frontend/x402-agent-gateway/`
-- **Tech Stack**: Next.js 16, React 19, Tailwind CSS 4, TypeScript
-- **Features**: 
-  - Interactive demo interface with 3 AI agent scenarios
-  - Real-time payment processing
-  - Agent conversation simulator
-  - Payment trace visualization
-
-### Backend (Python Flask)
-- **Location**: `gateway/`
-- **Tech Stack**: Flask, Solana Web3, SPL Token
-- **Features**:
-  - x402 payment proxy server
-  - Shared vault management
-  - Transaction signing and confirmation
-  - Multi-token support (SOL, USDC, USDT, etc.)
+- **Frontend**: Next.js 16, React 19, TypeScript
+- **Styling**: Tailwind CSS 4
+- **Blockchain**: Solana Web3.js, SPL Token
+- **Payments**: x402 Protocol, USDC, SOL
+- **Deployment**: Render, Vercel
 
 ## Quick Start
 
 ### Prerequisites
-- Node.js 18+ (for frontend)
-- Python 3.8+ (for backend)
+- Node.js 18+
 - Solana wallet with SOL and USDC (for vault)
 
-### Frontend Setup
+### Installation
 
 ```bash
 cd frontend/x402-agent-gateway
 npm install
-npm run dev
 ```
-
-Visit `http://localhost:3000`
-
-### Backend Setup
-
-```bash
-cd gateway
-pip install -r requirements.txt
-python server.py
-```
-
-Backend runs on `http://localhost:5000`
 
 ### Environment Variables
 
 Create `.env.local` in `frontend/x402-agent-gateway/`:
 
 ```env
-# Test Wallet Addresses
+# Test Wallet Addresses (Demo Recipients)
 NEXT_PUBLIC_TEST_WALLET_1=your_wallet_1
 NEXT_PUBLIC_TEST_WALLET_2=your_wallet_2
 NEXT_PUBLIC_TEST_WALLET_3=your_wallet_3
@@ -82,32 +56,50 @@ NEXT_PUBLIC_TEST_WALLET_5=your_wallet_5
 NEXT_PUBLIC_TEST_WALLET_6=your_wallet_6
 NEXT_PUBLIC_TEST_WALLET_7=your_wallet_7
 
-# Contract Address
+# Contract Address (Optional)
 NEXT_PUBLIC_CONTRACT_ADDRESS=your_contract_address
 
-# Vault Configuration (Backend)
+# Vault Configuration (REQUIRED)
 VAULT_PRIVATE_KEY=your_vault_private_key_base58
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 SOLANA_NETWORK=mainnet-beta
 ```
 
-See `env.example` for more details.
+See `frontend/x402-agent-gateway/env.example` for more details.
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+Visit `http://localhost:3000`
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
 
 ## Deployment
 
 ### Deploy to Render
 
-We provide a complete deployment configuration for Render:
-
 1. Push code to GitHub
 2. Connect repository to Render
-3. Use the `render.yaml` blueprint
-4. Add environment variables
+3. Create a new Web Service:
+   - **Name**: `x402-agent-gateway`
+   - **Language**: Node
+   - **Root Directory**: `frontend/x402-agent-gateway`
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+4. Add environment variables (see above)
 5. Deploy!
 
 See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for detailed instructions.
 
-### Deploy to Vercel (Frontend Only)
+### Deploy to Vercel
 
 ```bash
 cd frontend/x402-agent-gateway
@@ -123,9 +115,11 @@ vercel deploy
 2. AI agent searches for the API endpoint
 3. Agent checks pricing ($0.50 USDC for video generation)
 4. Agent prepares x402 payment request
-5. Shared vault automatically pays the fee
-6. API processes request and returns result
-7. User sees the complete trace and payment details
+5. User copies the Payment Response JSON
+6. User pastes it in "Make x402 Payment" form
+7. Shared vault automatically pays the fee
+8. Transaction confirmed on Solana
+9. User sees transaction signature and Solscan link
 ```
 
 ### x402 Protocol
@@ -167,6 +161,27 @@ Our shared vault automatically pays all x402 fees:
 - **View on Solscan**: [https://solscan.io/account/Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP](https://solscan.io/account/Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP)
 - **Funded by**: Token trading fees
 
+## Architecture
+
+### Frontend (Next.js)
+- **Location**: `frontend/x402-agent-gateway/`
+- **Components**:
+  - Interactive demo interface with 3 AI agent scenarios
+  - Real-time payment processing
+  - Agent conversation simulator
+  - Payment trace visualization
+
+### Payment API (Next.js API Routes)
+- **Location**: `frontend/x402-agent-gateway/src/app/api/`
+- **Routes**:
+  - `/api/send-payment` - Processes USDC/SOL payments from vault
+  - `/api/contract` - Returns contract address
+- **Features**:
+  - Automatic transaction signing
+  - ATA (Associated Token Account) creation
+  - Transaction memos with payment details
+  - Multi-token support
+
 ## Why Solana?
 
 | Feature | Traditional Payments | x402 on Solana |
@@ -178,14 +193,38 @@ Our shared vault automatically pays all x402 fees:
 | **Reversibility** | Chargebacks | Final |
 | **Global** | Limited | Worldwide |
 
+## Project Structure
+
+```
+x402/
+├── frontend/
+│   └── x402-agent-gateway/
+│       ├── src/
+│       │   ├── app/
+│       │   │   ├── api/
+│       │   │   │   ├── send-payment/route.ts  # Payment processing
+│       │   │   │   └── contract/route.ts      # Contract info
+│       │   │   ├── page.tsx                   # Main demo page
+│       │   │   └── globals.css
+│       │   ├── components/                    # UI components
+│       │   └── config/
+│       │       └── test-wallets.ts            # Wallet configuration
+│       ├── public/
+│       ├── package.json
+│       └── env.example
+├── render.yaml                                # Render deployment config
+├── RENDER_DEPLOYMENT.md
+└── README.md
+```
+
 ## Roadmap
 
 ### Current (v1.0)
 - ✅ Frontend with 3 demo scenarios
-- ✅ Backend payment proxy
-- ✅ Shared vault system
+- ✅ Automated vault payment system
 - ✅ Real Solana mainnet transactions
 - ✅ USDC and SOL support
+- ✅ Agent trace visualization
 
 ### Next (v1.1)
 - [ ] More AI service demos (Claude, GPT-4, Midjourney)
@@ -201,6 +240,14 @@ Our shared vault automatically pays all x402 fees:
 - [ ] White-label solution
 - [ ] API marketplace
 
+## Security
+
+- **Vault Security**: Private keys stored securely in environment variables
+- **Transaction Signing**: All transactions signed server-side via Next.js API routes
+- **Rate Limiting**: Prevents abuse of shared vault
+- **Input Validation**: All user inputs validated and sanitized
+- **No Client-Side Keys**: Private keys never exposed to browser
+
 ## Contributing
 
 We welcome contributions! Areas we need help:
@@ -211,18 +258,11 @@ We welcome contributions! Areas we need help:
 - Testing
 - Bug fixes
 
-## Security
-
-- **Vault Security**: Private keys stored securely in environment variables
-- **Transaction Signing**: All transactions signed server-side
-- **Rate Limiting**: Prevents abuse of shared vault
-- **Input Validation**: All user inputs validated and sanitized
-
 ## Support
 
 - **GitHub Issues**: [Report bugs or request features](https://github.com/anglowave/x402/issues)
 - **Twitter**: [@saxorita](https://x.com/saxorita)
-- **Documentation**: See `/docs` folder
+- **GitHub**: [anglowave/x402](https://github.com/anglowave/x402)
 
 ## Links
 

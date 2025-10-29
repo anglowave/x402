@@ -1,5 +1,5 @@
 services:
-  # Frontend - Next.js Application
+  # Frontend - Next.js Application with Built-in Payment API
   - type: web
     name: x402-agent-gateway
     env: node
@@ -32,24 +32,3 @@ services:
         value: https://api.mainnet-beta.solana.com
       - key: SOLANA_NETWORK
         value: mainnet-beta
-
-  # Backend - Python x402 Gateway
-  - type: web
-    name: x402-gateway-backend
-    env: python
-    region: oregon
-    plan: free
-    buildCommand: cd gateway && pip install -r requirements.txt
-    startCommand: cd gateway && python server.py
-    envVars:
-      - key: FLASK_ENV
-        value: production
-      - key: PORT
-        value: 5000
-      - key: VAULT_PRIVATE_KEY
-        sync: false
-      - key: SOLANA_RPC_URL
-        value: https://api.mainnet-beta.solana.com
-      - key: SOLANA_NETWORK
-        value: mainnet-beta
-
