@@ -800,17 +800,86 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Coming Soon Section */}
+            {/* Agent API Section */}
             <section className="relative z-20 px-6 mb-20">
-              <div className="max-w-4xl mx-auto backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl p-8 shadow-xl text-center">
-                <h2 className="font-sans text-white text-2xl font-bold mb-4">🚀 Coming Soon: Agent API</h2>
-                <p className="font-mono text-white/70 text-sm max-w-2xl mx-auto">
-                  Direct API endpoint for AI agents to make x402 payments programmatically. No manual copy-paste needed - just call our API and we handle everything.
-                </p>
-                <div className="mt-6">
-                  <code className="bg-black/30 text-[#0467CB] px-4 py-2 rounded font-mono text-xs">
-                    POST /api/agent-request
+              <div className="max-w-4xl mx-auto backdrop-blur-xl bg-gradient-to-br from-green-500/20 to-emerald-600/20 border border-green-500/40 rounded-xl p-8 shadow-2xl">
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 rounded-full px-4 py-1.5 mb-4">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="font-mono text-green-400 text-xs font-semibold">NOW LIVE</span>
+                  </div>
+                  <h2 className="font-sans text-white text-2xl md:text-3xl font-bold mb-4">🤖 Direct Agent API</h2>
+                  <p className="font-mono text-white/80 text-sm max-w-2xl mx-auto">
+                    AI agents can now request USDC/SOL payments programmatically. No manual copy-paste needed - just call our API and we handle everything.
+                  </p>
+                </div>
+                
+                <div className="bg-black/30 rounded-lg p-6 mb-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-mono text-white/60 text-xs">ENDPOINT</span>
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText('POST https://x402gateway.site/api/agent-request');
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
+                      }}
+                      className="flex items-center gap-1.5 px-2 py-1 bg-white/5 hover:bg-white/10 rounded text-white/60 hover:text-white transition-colors text-xs"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      <span>Copy</span>
+                    </button>
+                  </div>
+                  <code className="font-mono text-[#0467CB] text-sm">
+                    POST https://x402gateway.site/api/agent-request
                   </code>
+                </div>
+
+                <div className="bg-black/30 rounded-lg p-6 mb-6">
+                  <p className="font-mono text-white/60 text-xs mb-3">EXAMPLE REQUEST</p>
+                  <pre className="font-mono text-white/80 text-xs overflow-x-auto">
+{`{
+  "recipient": "SolanaWalletAddress",
+  "amount": 0.50,
+  "currency": "USDC",
+  "memo": "Payment for AI service",
+  "agent_id": "my-agent",
+  "service_name": "AI Video Gen"
+}`}
+                  </pre>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-black/20 rounded-lg p-4">
+                    <div className="text-green-400 text-2xl mb-2">⚡</div>
+                    <h3 className="font-mono text-white text-sm font-semibold mb-1">Instant Payments</h3>
+                    <p className="font-mono text-white/60 text-xs">Payments processed in seconds on Solana</p>
+                  </div>
+                  <div className="bg-black/20 rounded-lg p-4">
+                    <div className="text-green-400 text-2xl mb-2">🔒</div>
+                    <h3 className="font-mono text-white text-sm font-semibold mb-1">$1 Max Limit</h3>
+                    <p className="font-mono text-white/60 text-xs">Protected vault with per-request limits</p>
+                  </div>
+                  <div className="bg-black/20 rounded-lg p-4">
+                    <div className="text-green-400 text-2xl mb-2">📝</div>
+                    <h3 className="font-mono text-white text-sm font-semibold mb-1">Full Tracking</h3>
+                    <p className="font-mono text-white/60 text-xs">All transactions recorded on-chain</p>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <a 
+                    href="https://github.com/anglowave/x402/blob/main/frontend/x402-agent-gateway/AGENT_API.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-mono text-sm py-3 px-6 rounded-lg transition-all shadow-lg shadow-green-500/50 hover:shadow-green-500/70 hover:scale-105"
+                  >
+                    <span>View API Documentation</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
                 </div>
               </div>
             </section>
