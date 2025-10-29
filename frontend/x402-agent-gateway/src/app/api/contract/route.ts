@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const contractAddress = process.env.CONTRACT_ADDRESS || 'Coming Soon';
+  const contractAddress = 'CCCxGFK1PZh6tSznNwBiZVave3zEGpWHZkS8FCjspump';
   
   return NextResponse.json({
     contractAddress
