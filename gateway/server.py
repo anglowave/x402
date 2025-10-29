@@ -25,6 +25,10 @@ app = Flask(__name__)
 CORS(app)
 
 VAULT_PRIVATE_KEY = os.getenv('VAULT_PRIVATE_KEY')
+SOLANA_RPC_URL = os.getenv('SOLANA_RPC_URL', 'https://api.devnet.solana.com')
+SOLANA_NETWORK = os.getenv('SOLANA_NETWORK', 'devnet')
+PORT = int(os.getenv('PORT', 5000))
+
 vault_client = None
 
 def initialize_vault():
@@ -41,8 +45,8 @@ def initialize_vault():
         print(f"Private Key (base58): {base58.b58encode(bytes(keypair)).decode()}")
     
     config = X402Config(
-        rpc_url="https://api.devnet.solana.com",
-        network="devnet",
+        rpc_url=SOLANA_RPC_URL,
+        network=SOLANA_NETWORK,
     )
     
     vault_client = X402Client(keypair, config)
@@ -209,9 +213,12 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"\nCould not check balance: {e}")
     
-    print(f"\nServer starting on http://localhost:3000")
-    print("Open http://localhost:3000 in your browser")
+    print(f"\nServer starting on http://0.0.0.0:{PORT}")
+    print(f"Environment: {SOLANA_NETWORK}")
+    print(f"RPC URL: {SOLANA_RPC_URL}")
     print("="*60 + "\n")
     
-    app.run(host='0.0.0.0', port=3000, debug=True)
+    # Disable debug mode in production
+    debug_mode = os.getenv('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', port=PORT, debug=debug_mode)
 

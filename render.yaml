@@ -1,0 +1,55 @@
+services:
+  # Frontend - Next.js Application
+  - type: web
+    name: x402-agent-gateway
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd frontend/x402-agent-gateway && npm install && npm run build
+    startCommand: cd frontend/x402-agent-gateway && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_TEST_WALLET_1
+        sync: false
+      - key: NEXT_PUBLIC_TEST_WALLET_2
+        sync: false
+      - key: NEXT_PUBLIC_TEST_WALLET_3
+        sync: false
+      - key: NEXT_PUBLIC_TEST_WALLET_4
+        sync: false
+      - key: NEXT_PUBLIC_TEST_WALLET_5
+        sync: false
+      - key: NEXT_PUBLIC_TEST_WALLET_6
+        sync: false
+      - key: NEXT_PUBLIC_TEST_WALLET_7
+        sync: false
+      - key: NEXT_PUBLIC_CONTRACT_ADDRESS
+        sync: false
+      - key: VAULT_PRIVATE_KEY
+        sync: false
+      - key: SOLANA_RPC_URL
+        value: https://api.mainnet-beta.solana.com
+      - key: SOLANA_NETWORK
+        value: mainnet-beta
+
+  # Backend - Python x402 Gateway
+  - type: web
+    name: x402-gateway-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: cd gateway && pip install -r requirements.txt
+    startCommand: cd gateway && python server.py
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: VAULT_PRIVATE_KEY
+        sync: false
+      - key: SOLANA_RPC_URL
+        value: https://api.mainnet-beta.solana.com
+      - key: SOLANA_NETWORK
+        value: mainnet-beta
+
