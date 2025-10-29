@@ -197,6 +197,9 @@ export default function Home() {
   const [paymentResponse, setPaymentResponse] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  const [vaultBalance, setVaultBalance] = useState<any>(null);
+  const [isLoadingBalance, setIsLoadingBalance] = useState(true);
+  
   const activeConfig = tabConfigs[activeTab];
 
   useEffect(() => {
@@ -204,6 +207,17 @@ export default function Home() {
       .then(res => res.json())
       .then(data => setContractAddress(data.contractAddress))
       .catch(() => setContractAddress('Error loading'));
+    
+    // Fetch vault balance
+    fetch('/api/vault-balance')
+      .then(res => res.json())
+      .then(data => {
+        setVaultBalance(data);
+        setIsLoadingBalance(false);
+      })
+      .catch(() => {
+        setIsLoadingBalance(false);
+      });
   }, []);
 
   const startChat = () => {
@@ -368,6 +382,47 @@ export default function Home() {
                     )}
                   </button>
                 </div>
+              </div>
+
+              {/* Vault Balance */}
+              <div className="flex items-center justify-center gap-3 mt-6">
+                <a 
+                  href="https://solscan.io/account/Ctty13EdquEQSMUyrxBdfZnVkzAF9sgHQwdUdjUKwhBP"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="backdrop-blur-xl bg-white/5 border border-white/15 rounded-xl px-10 py-5 hover:bg-white/10 transition-all hover:scale-[1.02] cursor-pointer no-underline shadow-lg"
+                >
+                  <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-3">
+                      <Wallet className="w-6 h-6 text-white/60" />
+                      <span className="font-mono text-white/60 text-base font-medium">Vault Balance:</span>
+                    </div>
+                    {isLoadingBalance ? (
+                      <span className="font-mono text-white/40 text-base">Loading...</span>
+                    ) : vaultBalance?.success ? (
+                      <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[#0467CB] text-2xl font-bold">
+                            {vaultBalance.balances.usdc.toFixed(2)}
+                          </span>
+                          <span className="font-mono text-white/60 text-sm">USDC</span>
+                        </div>
+                        <div className="w-px h-8 bg-white/20"></div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[#0467CB] text-2xl font-bold">
+                            {vaultBalance.balances.sol.toFixed(4)}
+                          </span>
+                          <span className="font-mono text-white/60 text-sm">SOL</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="font-mono text-red-400 text-base">Error loading</span>
+                    )}
+                    <svg className="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </div>
+                </a>
               </div>
             </div>
 
@@ -547,14 +602,18 @@ export default function Home() {
                   </div>
                   <div>
                     <h3 className="text-white font-semibold mb-2">2. Payment Challenge</h3>
-                    <p>The API sends back payment requirements: amount, recipient wallet, currency (USDC/SOL), and a unique nonce.</p>
+                    <p>The API sends back payment requirements: amount, recipient wallet, currency (USDC/SOL), and a unique nonce in JSON format.</p>
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold mb-2">3. Our Vault Pays</h3>
-                    <p>Our gateway intercepts the 402 response and automatically pays from our shared vault (funded by token trading fees).</p>
+                    <h3 className="text-white font-semibold mb-2">3. Copy & Paste Payment JSON</h3>
+                    <p>Copy the JSON payment response from your agent and paste it into the "Make x402 Payment" section below. Our gateway will handle the rest.</p>
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold mb-2">4. Transaction Confirmed</h3>
+                    <h3 className="text-white font-semibold mb-2">4. Our Vault Pays</h3>
+                    <p>Our gateway automatically pays from our shared vault (funded by token trading fees). No wallet connection needed.</p>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold mb-2">5. Transaction Confirmed</h3>
                     <p>Payment is sent on Solana blockchain. The API verifies the transaction and grants access to the requested resource.</p>
                   </div>
                   <div className="pt-4 border-t border-white/10">
@@ -570,6 +629,35 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
+              </div>
+            </section>
+
+            {/* Explore Solana Ecosystem Section */}
+            <section className="relative z-20 px-6 mb-20">
+              <div className="max-w-4xl mx-auto backdrop-blur-xl bg-gradient-to-br from-[#0467CB]/20 to-purple-600/20 border border-[#0467CB]/40 rounded-xl p-8 shadow-2xl text-center">
+                <div className="flex items-center justify-center mb-4">
+                  <svg className="w-12 h-12 text-[#0467CB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                </div>
+                <h2 className="font-sans text-white text-2xl md:text-3xl font-bold mb-4">Explore the Solana Ecosystem</h2>
+                <p className="font-mono text-white/80 text-sm md:text-base max-w-2xl mx-auto mb-6">
+                  Find RPC providers, APIs, tools, and services to build on Solana. Discover everything you need to power your applications.
+                </p>
+                <a 
+                  href="https://www.x402scan.com/ecosystem?chain=solana" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#0467CB] hover:bg-[#0355a3] text-white font-mono text-sm md:text-base py-3 px-6 rounded-lg transition-all shadow-lg shadow-[#0467CB]/50 hover:shadow-[#0467CB]/70 hover:scale-105"
+                >
+                  <span>Visit x402scan Ecosystem</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+                <p className="font-mono text-white/60 text-xs mt-4">
+                  Browse RPC endpoints • Explore APIs • Discover developer tools
+                </p>
               </div>
             </section>
 

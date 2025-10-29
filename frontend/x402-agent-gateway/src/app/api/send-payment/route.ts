@@ -64,6 +64,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Enforce maximum transaction limit of $1
+    const MAX_TRANSACTION_AMOUNT = 1.0;
+    if (amount > MAX_TRANSACTION_AMOUNT) {
+      console.log('Transaction amount exceeds maximum:', { amount, max: MAX_TRANSACTION_AMOUNT });
+      return NextResponse.json(
+        { 
+          success: false,
+          error: 'Transaction amount exceeds limit',
+          message: `The requested amount of ${amount} ${currency} exceeds our maximum transaction limit of $${MAX_TRANSACTION_AMOUNT}.`,
+          details: {
+            requested: `${amount} ${currency}`,
+            maximum: `${MAX_TRANSACTION_AMOUNT} ${currency}`,
+            reason: 'This limit helps protect our shared vault and ensures fair usage for all users.'
+          },
+          help: {
+            suggestion: 'Please reduce the payment amount to $1.00 or less and try again.'
+          }
+        },
+        { status: 400 }
+      );
+    }
+
     // Get vault private key from environment
     const vaultPrivateKey = process.env.VAULT_PRIVATE_KEY;
     if (!vaultPrivateKey) {
@@ -228,10 +250,48 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error('Payment error:', error);
+    
+    // Check for rate limit errors
+    if (error.message && (error.message.includes('429') || error.message.includes('rate limit'))) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: 'RPC rate limit exceeded',
+          message: 'The Solana RPC endpoint has reached its connection rate limit. Please try again in a few moments.',
+          help: {
+            suggestion: 'Consider using a dedicated RPC provider for better reliability',
+            resources: 'Find RPC providers and explore the Solana ecosystem at https://www.x402scan.com/ecosystem?chain=solana'
+          }
+        },
+        { status: 429 }
+      );
+    }
+
+    // Check for blockhash errors
+    if (error.message && error.message.includes('blockhash')) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: 'Network connection issue',
+          message: 'Unable to connect to the Solana network. The RPC service may be experiencing high traffic.',
+          help: {
+            suggestion: 'Try again in a moment or use a different RPC endpoint',
+            resources: 'Explore RPC providers and the Solana ecosystem at https://www.x402scan.com/ecosystem?chain=solana'
+          }
+        },
+        { status: 503 }
+      );
+    }
+
+    // Generic error
     return NextResponse.json(
       { 
         success: false,
-        error: error.message || 'Payment failed' 
+        error: 'Payment failed',
+        message: error.message || 'An unexpected error occurred while processing your payment',
+        help: {
+          resources: 'For API providers and ecosystem tools, visit https://www.x402scan.com/ecosystem?chain=solana'
+        }
       },
       { status: 500 }
     );
